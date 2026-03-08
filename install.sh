@@ -119,19 +119,29 @@ echo "⏰ 配置 Cron Job..."
 
 # 使用配置中的 schedule，如果没有则用默认值
 CRON_SCHEDULE="${SCHEDULE:-30 6,14,22 * * *}"
+CRON_ENTRY="$CRON_SCHEDULE $RUN_SCRIPT"
 
 # 检查是否已存在
 if crontab -l 2>/dev/null | grep -q "open-source-monitor"; then
-    echo "   ⚠️  Cron job 已存在，跳过"
-    echo "   如需更新，请先运行：crontab -e 删除旧的 open-source-monitor 条目"
+    # 检查 schedule 是否变化
+    EXISTING_SCHEDULE=$(crontab -l | grep "open-source-monitor" | grep -v "^#" | awk '{print $1,$2,$3,$4,$5}')
+    if [[ "$EXISTING_SCHEDULE" == "$CRON_SCHEDULE" ]]; then
+        echo "   ⚠️  Cron job 已存在，跳过"
+    else
+        echo "   📝 检测到 schedule 变化，更新 Cron job..."
+        echo "      旧：$EXISTING_SCHEDULE"
+        echo "      新：$CRON_SCHEDULE"
+        # 更新 cron（删除旧的，添加新的）
+        (crontab -l 2>/dev/null | grep -v "open-source-monitor"; echo "# Open Source Monitor - GitHub Release + Docker Hub 监控"; echo "$CRON_ENTRY") | crontab -
+        echo "   ✅ Cron job 已更新"
+    fi
 else
     # 添加 cron
-    CRON_ENTRY="$CRON_SCHEDULE $RUN_SCRIPT"
     (crontab -l 2>/dev/null | grep -v "open-source-monitor"; echo "# Open Source Monitor - GitHub Release + Docker Hub 监控") | crontab -
     (crontab -l 2>/dev/null; echo "$CRON_ENTRY") | crontab -
     echo "   ✅ Cron job 已添加"
-    echo "   时间：$CRON_SCHEDULE"
 fi
+echo "   时间：$CRON_SCHEDULE"
 
 # 6. 测试运行
 echo ""
