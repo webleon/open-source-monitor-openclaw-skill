@@ -38,11 +38,11 @@ nano config.json
 ```json
 {
   "github": [
-    "openclaw/openclaw",    // ⚠️ 改为你的 GitHub 仓库
+    "openclaw/openclaw",    // ⚠️ 改为你想追踪的 GitHub 仓库
     "nodejs/node"
   ],
   "docker": [
-    "ubuntu/nginx:latest",  // ⚠️ 改为你的 Docker 镜像
+    "ubuntu/nginx:latest",  // ⚠️ 改为你想追踪的 Docker 镜像
     "google/cloud-sdk:stable"
   ],
   "schedule": "30 6,14,22 * * *",
