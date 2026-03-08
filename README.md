@@ -155,6 +155,38 @@ cat ~/.openclaw/workspace/scripts/open-source-monitor/log/$(date +%Y-%m-%d).log
 
 ---
 
+## 🔄 配置修改后如何生效
+
+### 修改监控目标（github/docker 列表）
+
+✅ **自动生效** - 下次 Cron 执行时自动应用新配置
+
+**无需任何操作**，脚本每次运行都会读取最新的 `config.json`。
+
+---
+
+### 修改检查频率（schedule）
+
+⚠️ **需要重新运行 install.sh**
+
+```bash
+# 1. 编辑 config.json，修改 schedule
+nano ~/.openclaw/workspace/scripts/open-source-monitor/config.json
+
+# 2. 重新运行安装脚本（会自动更新 Cron Job）
+./install.sh
+
+# 3. 验证
+crontab -l
+```
+
+**install.sh 会：**
+- 检测到 schedule 变化
+- 自动删除旧的 Cron Job
+- 添加新的 Cron Job
+
+---
+
 ## 🗑️ 卸载
 
 ### 移除 Cron Job
