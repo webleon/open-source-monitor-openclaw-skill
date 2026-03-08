@@ -1,0 +1,9 @@
+# 个人配置（包含敏感信息）
+config.json
+
+# 运行时生成
+.cache/
+log/*.log
+
+# macOS
+.DS_Store

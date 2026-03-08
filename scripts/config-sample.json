@@ -1,0 +1,13 @@
+{
+  "github": [
+    "openclaw/openclaw",
+    "nodejs/node"
+  ],
+  "docker": [
+    "ubuntu/nginx:latest",
+    "google/cloud-sdk:stable"
+  ],
+  "schedule": "30 6,14,22 * * *",
+  "target_channel": "telegram",
+  "target_user": "YOUR_TELEGRAM_USER_ID"
+}
